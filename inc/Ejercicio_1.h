@@ -33,7 +33,7 @@ extern "C" {
 bool_t encenderLed(gpioMap_t led);
 bool_t apagarLeds();
 bool_t leerTecla(gpioMap_t tecla);
-void activarSecuencia(gpioMap_t *activarsecuecia);
+void activarSecuencia(gpioMap_t *psecuencia2,uint16_t tiempo);
 
 
 /*=====[Prototypes (declarations) of public interrupt functions]=============*/

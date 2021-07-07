@@ -20,20 +20,59 @@
 /*=====[Definitions of private global variables]=============================*/
 
 /*=====[Main function, program entry point after power on or reset]==========*/
-gpioMap_t secuencia[]={LEDB,LED1,LED2,LED3};
-gpioMap_t secuencia1[]={LED3,LED2,LED1,LEDB};;
-gpioMap_t secuencia2[]={LED1,LED3,LEDB,LED2};
-gpioMap_t * psecuencia = secuencia1;
+
+gpioMap_t secuencia1[]={LEDB,LED1,LED2,LED3};;
+gpioMap_t secuencia2[]={LED3,LED2,LED1,LEDB};
+gpioMap_t * psecuencia = &secuencia1[0];
+
 uint8_t i = 0;
+uint8_t sequence = 0;
+uint16_t tiempo=150;;
+
 int main( void )
 {
    // ----- Setup -----------------------------------
    boardInit();
-   delay_t delay;
-   delayConfig( &delay, 500 );
+
+   //delay_t delay;
+   //delayConfig( &delay, 500 );
    // ----- Repeat for ever -------------------------
    while( true )
    {
+	   if(!leerTecla(TEC1))
+	   {
+		   printf("tecla TEC1 presionada");
+	   }
+	   else
+	   {
+		   printf("tecla TEC1 no presionada");
+	   }
+	   if(!leerTecla(TEC4))
+	   {
+		   printf("tecla TEC4 presionada");
+	   }
+	   else
+	   {
+		   printf("tecla TEC4 no presionada");
+	   }
+
+	   if(!leerTecla(TEC2))
+	   {
+	   		printf("tecla TEC1 presionada");
+	   }
+	   else
+	   {
+	   		printf("tecla TEC1 no presionada");
+	   }
+	   if(!leerTecla(TEC3))
+	   {
+	        printf("tecla TEC4 presionada");
+	   }
+	   else
+	   {
+	   		printf("tecla TEC4 no presionada");
+	   }
+
 
 	   //encenderLed(LED1);
 	  // printf("led prendido");
@@ -50,7 +89,7 @@ int main( void )
 */
 	   //delayWrite( &delay, 150 );
 	  // activarSecuencia(secuencia2);
-	   activarSecuencia(psecuencia);
+	   activarSecuencia(psecuencia,tiempo);
 
    }
 
@@ -83,53 +122,63 @@ bool_t apagarLeds()
 
 bool_t leerTecla(gpioMap_t tecla)
 {
+	if(!gpioRead(tecla))
+	{
+		if(tecla==TEC1)
+		{
+			psecuencia = &secuencia1[0];
+		}
+		if(tecla==TEC4)
+		{
+			psecuencia = &secuencia2[0];
+		}
+		if(tecla==TEC2)
+		{
+			tiempo=150;
+		}
+		if(tecla==TEC3)
+		{
+			tiempo=750;
+		}
+
+	}
 	return gpioRead(tecla);
 }
-
-void activarSecuencia(gpioMap_t activarsecuencia[])
+void activarSecuencia(gpioMap_t * psecuencia2,uint16_t tiempo)
 {
 	for(i=0;i<=3;i++)
-	{
-		//encenderLed(activarsecuencia[i]);
+		{
 		if(i==0)
 		{
-			gpioWrite(activarsecuencia[0], ON );
-			gpioWrite(activarsecuencia[1], OFF );
-			gpioWrite(activarsecuencia[2], OFF );
-			gpioWrite(activarsecuencia[3], OFF );
+		gpioWrite(* psecuencia2, ON );
+		gpioWrite(*(psecuencia2+1), OFF );
+		gpioWrite(* (psecuencia2+2), OFF );
+		gpioWrite(* (psecuencia2+3), OFF );
 		}
 		if(i==1)
 		{
-			gpioWrite(activarsecuencia[0], OFF );
-		    gpioWrite(activarsecuencia[1], ON );
-			gpioWrite(activarsecuencia[2], OFF );
-			gpioWrite(activarsecuencia[3], OFF );
-	    }
+		gpioWrite(* psecuencia2, OFF );
+		gpioWrite(* (psecuencia2+1), ON );
+		gpioWrite(* (psecuencia2+2), OFF );
+		gpioWrite(* (psecuencia2+3), OFF );
+				}
 		if(i==2)
-	    {
-			gpioWrite(activarsecuencia[0], OFF );
-			gpioWrite(activarsecuencia[1], OFF );
-			gpioWrite(activarsecuencia[2], ON );
-			gpioWrite(activarsecuencia[3], OFF );
-	    }
+		{
+		gpioWrite(* psecuencia2, OFF );
+		gpioWrite(* (psecuencia2+1), OFF );
+		gpioWrite(* (psecuencia2+2), ON );
+		gpioWrite(* (psecuencia2+3), OFF );
+		}
 		if(i==3)
 		{
-			gpioWrite(activarsecuencia[0], OFF);
-			gpioWrite(activarsecuencia[1], OFF );
-			gpioWrite(activarsecuencia[2], OFF );
-			gpioWrite(activarsecuencia[3], ON );
+		gpioWrite(* psecuencia2, OFF );
+		gpioWrite(* (psecuencia2+1), OFF );
+		gpioWrite(* (psecuencia2+2), OFF );
+		gpioWrite(* (psecuencia2+3), ON );
 		}
-		delay(400);
-		//activarsecuencia++;
+		delay(tiempo);
+		}
+		i=0;
 	}
-	i=0;
-	return;
-}
-
-void prender_secuencia()
-{
-
-}
-
 
 
