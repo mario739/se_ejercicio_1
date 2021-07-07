@@ -4,20 +4,9 @@
  * Version: 1
  *===========================================================================*/
 
-/*=====[Inclusions of function dependencies]=================================*/
 
 #include "Ejercicio_1.h"
-//#include "sapi.h"
 
-/*=====[Definition macros of private constants]==============================*/
-
-/*=====[Definitions of extern global variables]==============================*/
-
-/*=====[Definitions of public global variables]==============================*/
-
-/*=====[Definitions of private global variables]=============================*/
-
-/*=====[Main function, program entry point after power on or reset]==========*/
 
 static gpioMap_t secuencia1[]={LEDB,LED1,LED2,LED3};;
 static gpioMap_t secuencia2[]={LED3,LED2,LED1,LEDB};
@@ -29,13 +18,10 @@ static uint16_t tiempo=150;;
 
 int main( void )
 {
-   // ----- Setup -----------------------------------
+
    boardInit();
 
-   //delay_t delay;
-   //delayConfig( &delay, 500 );
-   // ----- Repeat for ever -------------------------
-   while( true )
+     while( true )
    {
 	   if(!leerTecla(TEC1))
 	   {
